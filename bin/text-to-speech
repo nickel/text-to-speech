@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'google/apis/texttospeech_v1'
+
+arguments = {}.tap do |hash|
+  ARGV.each do |arg|
+    key, value = arg.split("=")
+    hash[key.gsub("--", "")] = value
+  end
+end
+
+raise "Missing `--input-file` argument" if arguments["input-file"].nil?
+raise "Missing `--output-file` argument" if arguments["output-file"].nil?
+
+service = Google::Apis::TexttospeechV1::TexttospeechService.new
+service.key = ENV['GOOGLE_API_KEY']
+
+request = Google::Apis::TexttospeechV1::SynthesizeSpeechRequest.new(
+  input: { ssml: File.read(arguments['input-file']) },
+  voice: { language_code: 'en-US', name: 'en-US-Neural2-D', ssml_gender: 'MALE' },
+  audio_config: { audio_encoding: 'MP3' }
+)
+
+response = service.synthesize_text_speech(request)
+
+File.open(arguments['output-file'], 'wb') do |f|
+  f.write(response.audio_content)
+end
