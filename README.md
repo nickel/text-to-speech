@@ -10,10 +10,11 @@ A simple ruby script to convert a text to audio using the Google service: **Text
 
 ```
 docker build . -t text-to-speech
-docker run -it -v $PWD:/app --env-file .env text-to-speech --input-file=input.ssml --output-file=output.mp3
+docker run -it -v $PWD:/app --env-file .env text-to-speech \
+  --input-file=input.ssml --output-file=output.mp3
 ```
 
 ## References
 
-https://cloud.google.com/text-to-speech/docs/libraries
-https://cloud.google.com/text-to-speech/docs/ssml
+* https://cloud.google.com/text-to-speech/docs/libraries
+* https://cloud.google.com/text-to-speech/docs/ssml
